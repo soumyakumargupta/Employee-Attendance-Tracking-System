@@ -27,7 +27,7 @@ const EmployeeDetail = () => {
     try {
       setLoading(true);
       const response = await apiService.getEmployeeList();
-      const employees = response.data.employees || [];
+      const employees = response.data.data.employees || [];
       const foundEmployee = employees.find(emp => emp.employeeId === parseInt(employeeId));
       
       if (!foundEmployee) {
@@ -52,7 +52,7 @@ const EmployeeDetail = () => {
         ...dateRange,
         employeeId: employeeId
       });
-      setAttendanceRecords(response.data.records || []);
+      setAttendanceRecords(response.data.data.records || []);
     } catch (error) {
       console.error('Error fetching attendance data:', error);
       toast.error('Failed to load attendance data');

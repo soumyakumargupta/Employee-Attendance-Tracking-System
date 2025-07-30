@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { apiService } from '../../services/api';
@@ -272,9 +272,18 @@ const EmployeeRegistration = () => {
         </form>
 
         {/* Footer */}
-        <div className="text-center">
+        <div className="text-center space-y-2">
           <p className="text-xs text-gray-500">
             Complete your registration to access the system
+          </p>
+          <p className="text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            >
+              Sign in here
+            </Link>
           </p>
         </div>
       </div>

@@ -60,7 +60,7 @@ const AttendanceRecords = () => {
       };
       
       const response = await apiService.getAttendanceRecords(params);
-      setRecords(response.data.records || []);
+      setRecords(response.data.data.records || []);
     } catch (error) {
       console.error('Error fetching attendance records:', error);
       toast.error('Failed to fetch attendance records');

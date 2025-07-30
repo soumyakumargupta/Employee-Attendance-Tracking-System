@@ -43,8 +43,8 @@ const AdminDashboard = () => {
         })
       ]);
 
-      const employees = employeesResponse.data.employees || [];
-      const todayAttendance = attendanceResponse.data.records || [];
+      const employees = employeesResponse.data.data.employees || [];
+      const todayAttendance = attendanceResponse.data.data.records || [];
 
       const totalEmployees = employees.length;
       const presentToday = todayAttendance.filter(record => record.status === 'present').length;

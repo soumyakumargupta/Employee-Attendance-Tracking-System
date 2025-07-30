@@ -54,7 +54,7 @@ const EmployeeProfile = () => {
         endDate: format(new Date(), 'yyyy-MM-dd')
       });
       
-      const records = response.data.records || [];
+      const records = response.data.data.records || [];
       const totalDays = records.length;
       const presentDays = records.filter(r => r.status === 'present').length;
       const lateDays = records.filter(r => r.isLate).length;

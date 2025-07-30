@@ -56,7 +56,7 @@ const EmployeeAttendanceHistory = () => {
       setLoading(true);
       const dateRange = getDateRange();
       const response = await apiService.getMyAttendanceRecords(dateRange);
-      setRecords(response.data.records || []);
+      setRecords(response.data.data.records || []);
     } catch (error) {
       console.error('Error fetching attendance history:', error);
       toast.error('Failed to fetch attendance history');

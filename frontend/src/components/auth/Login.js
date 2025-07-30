@@ -252,13 +252,16 @@ const Login = () => {
           {/* Registration Link */}
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              New employee?{' '}
               <Link
-                to="/register"
+                to="/employee-registration"
                 className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
               >
-                Contact your administrator
+                Complete your registration
               </Link>
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              Use the OTP sent to your email by your administrator
             </p>
           </div>
         </form>

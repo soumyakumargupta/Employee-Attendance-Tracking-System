@@ -29,6 +29,7 @@ function App() {
         <div className="App min-h-screen bg-gray-50">
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/verify-otp" element={<OTPVerification />} />
             <Route path="/employee-registration" element={<EmployeeRegistration />} />

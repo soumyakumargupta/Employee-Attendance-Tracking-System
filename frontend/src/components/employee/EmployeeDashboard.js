@@ -36,7 +36,7 @@ const EmployeeDashboard = () => {
         endDate: format(new Date(), 'yyyy-MM-dd')
       });
       
-      const todayRecord = todayResponse.data.records?.[0] || null;
+      const todayRecord = todayResponse.data.data.records?.[0] || null;
       setTodayAttendance(todayRecord);
       
       // Fetch this week's stats
@@ -48,7 +48,7 @@ const EmployeeDashboard = () => {
         endDate: format(new Date(), 'yyyy-MM-dd')
       });
       
-      const weekRecords = weekResponse.data.records || [];
+      const weekRecords = weekResponse.data.data.records || [];
       const totalDays = weekRecords.length;
       const presentDays = weekRecords.filter(r => r.status === 'present').length;
       const totalHours = weekRecords.reduce((sum, r) => sum + (r.totalHoursWorked || 0), 0);

@@ -11,6 +11,8 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [registrationInfo, setRegistrationInfo] = useState(null);
   const [newEmployee, setNewEmployee] = useState({
     firstName: '',
     lastName: '',
@@ -26,7 +28,7 @@ const EmployeeList = () => {
     try {
       setLoading(true);
       const response = await apiService.getEmployeeList();
-      setEmployees(response.data.employees || []);
+      setEmployees(response.data.data.employees || []);
     } catch (error) {
       console.error('Error fetching employees:', error);
       toast.error('Failed to fetch employees');
@@ -47,8 +49,17 @@ const EmployeeList = () => {
     try {
       const response = await apiService.initiateEmployeeRegistration(newEmployee);
       const generatedEmployeeId = response.data.employeeId;
-      toast.success(`Employee registration initiated! Employee ID: ${generatedEmployeeId}. OTP sent to employee email.`);
+
+      // Store registration info for success modal
+      setRegistrationInfo({
+        employeeId: generatedEmployeeId,
+        email: newEmployee.email,
+        name: `${newEmployee.firstName} ${newEmployee.lastName}`,
+        registrationUrl: `${window.location.origin}/employee-registration`
+      });
+
       setShowAddModal(false);
+      setShowSuccessModal(true);
       setNewEmployee({
         firstName: '',
         lastName: '',
@@ -246,6 +257,79 @@ const EmployeeList = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && registrationInfo && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                    <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Employee Registration Initiated!
+                </h3>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p><strong>Employee:</strong> {registrationInfo.name}</p>
+                  <p><strong>Employee ID:</strong> {registrationInfo.employeeId}</p>
+                  <p><strong>Email:</strong> {registrationInfo.email}</p>
+                </div>
+
+                <div className="mt-4 p-3 bg-blue-50 rounded-md">
+                  <p className="text-sm text-blue-800 mb-2">
+                    <strong>Registration URL:</strong>
+                  </p>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={registrationInfo.registrationUrl}
+                      readOnly
+                      className="flex-1 text-xs p-2 border rounded bg-white"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(registrationInfo.registrationUrl);
+                        toast.success('Registration URL copied to clipboard!');
+                      }}
+                      className="px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-4 text-xs text-gray-500">
+                  <p>✅ OTP has been sent to the employee's email</p>
+                  <p>📧 Share the registration URL with the employee</p>
+                </div>
+
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                >
+                  Got it!
+                </button>
+              </div>
             </div>
           </div>
         </div>
