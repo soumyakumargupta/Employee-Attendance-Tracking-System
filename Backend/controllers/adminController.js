@@ -3,7 +3,7 @@ const Attendance = require('../models/Attendance');
 
 const getEmployeeList = async (req, res) => {
     try{    
-        const employees = await Employee.find({}, '-hashedPassword -__v ');
+        const employees = await Employee.find({ role: { $ne: 'admin' } }, '-hashedPassword -__v ');
         res.json({
             success: true,
             data: {
