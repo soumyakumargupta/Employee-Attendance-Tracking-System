@@ -207,4 +207,4 @@ If you encounter any issues or have questions, please:
 
 ---
 
-**Made with ❤️ by [Your Name]**
+**Made with ❤️ by SKG**
