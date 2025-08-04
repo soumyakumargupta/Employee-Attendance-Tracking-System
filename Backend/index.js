@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-
 const express = require('express');
 const config = require('./config/appConfig');
 const connectDB = require('./config/db');
@@ -13,25 +12,73 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:3001'], credentials: true }));
+// Updated CORS for production
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'http://localhost:3001', 
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({ 
+  origin: allowedOrigins, 
+  credentials: true 
+}));
 app.use(express.json());
 
-app.get('/', (req, res) => {//this route is for testing the server
-    res.send('Welcome to the Employee Attendance Management System API');//this where we connect our frontend
+// MongoDB connection (for serverless, we need to handle connection differently)
+let isConnected = false;
+
+const connectToDatabase = async () => {
+  if (isConnected) {
+    return;
+  }
+  
+  try {
+    await connectDB();
+    isConnected = true;
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+  }
+};
+
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  await connectToDatabase();
+  next();
 });
+
+app.get('/', (req, res) => {
+    res.json({ 
+      message: 'Welcome to the Employee Attendance Management System API',
+      status: 'Active',
+      timestamp: new Date().toISOString()
+    });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/employee', employeeRoutes);
 
-connectDB().then(() => {
-    // Log which database we're actually connected to
-    const dbName = mongoose.connection.db.databaseName;
-    console.log(`MongoDB connected to database: ${dbName}`);
-    console.log(`Connection host: ${mongoose.connection.host}`);
-    console.log('---');
-    
-    app.listen(config.port, () => {
-        console.log(`Server running on port ${config.port}`);
-    });
+// Error handling middleware
+app.use((error, req, res, next) => {
+  console.error('Global error handler:', error);
+  res.status(500).json({ 
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
+  });
 });
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const port = config.port || 5000;
+  connectToDatabase().then(() => {
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  });
+}
+
+// Export for Vercel
+module.exports = app;
