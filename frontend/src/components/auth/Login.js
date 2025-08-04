@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { EyeIcon, EyeSlashIcon, UserCircleIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { APP_CONFIG } from '../../utils/constants';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -130,7 +131,7 @@ const Login = () => {
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            TA Systems - Employee Attendance Management
+            {APP_CONFIG.NAME}
           </p>
         </div>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { APP_CONFIG } from '../../utils/constants';
 
 const Layout = ({ children, title }) => {
   const { user, logout } = useAuth();
@@ -36,7 +37,7 @@ const Layout = ({ children, title }) => {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <h1 className="text-xl font-semibold text-gray-900">
-                  Attendance Management
+                  {APP_CONFIG.NAME}
                 </h1>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

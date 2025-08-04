@@ -4,7 +4,7 @@ import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 
 // Temporary direct API instance to bypass any caching issues
 const directApi = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -15,7 +15,7 @@ class AuthService {
   // Login with email and password
   async login(credentials) {
     try {
-      console.log('🚀 AuthService: Making login request to http://localhost:5000/api/auth/login');
+      console.log('🚀 AuthService: Making login request to', `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/login`);
       const response = await directApi.post('/auth/login', credentials);
       console.log('✅ AuthService: Login successful');
       return response.data;
